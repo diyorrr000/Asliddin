@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quvnoq Bog'cha | Bolalar Bog'chasi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables - Pastel ranglar */
+        :root {
+            --primary: #FF9E6D;
+            --secondary: #6DC0FF;
+            --accent: #FF6DC0;
+            --success: #6DFF9E;
+            --light: #FFF9F0;
+            --dark: #2D3748;
+            
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.16);
+            
+            --transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            
+            /* 12 column grid uchun */
+            --grid-columns: 12;
+            --grid-gap: 24px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="%23FF9E6D" opacity="0.7"/><circle cx="16" cy="16" r="6" fill="%23FF6DC0"/></svg>') 16 16, auto;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Comic Neue', cursive;
+            font-weight: 700;
+        }
+        
+        /* Grid System */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(var(--grid-columns), 1fr);
+            gap: var(--grid-gap);
+        }
+        
+        .col-1 { grid-column: span 1; }
+        .col-2 { grid-column: span 2; }
+        .col-3 { grid-column: span 3; }
+        .col-4 { grid-column: span 4; }
+        .col-5 { grid-column: span 5; }
+        .col-6 { grid-column: span 6; }
+        .col-7 { grid-column: span 7; }
+        .col-8 { grid-column: span 8; }
+        .col-9 { grid-column: span 9; }
+        .col-10 { grid-column: span 10; }
+        .col-11 { grid-column: span 11; }
+        .col-12 { grid-column: span 12; }
+        
+        /* Mishka harakati effekti */
+        .mouse-effect {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: multiply;
+            transition: transform 0.1s;
+        }
+        
+        .trail {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--secondary);
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.6;
+        }
+        
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 32px;
+            border-radius: var(--radius-xl);
+            font-family: 'Comic Neue', cursive;
+            font-weight: 700;
+            font-size: 18px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn--primary {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn--primary:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn--primary::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 1%, transparent 10%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .btn--primary:hover::after {
+            opacity: 1;
+            animation: sparkle 0.5s linear;
+        }
+        
+        @keyframes sparkle {
+            0% { transform: rotate(0deg) scale(0.5); }
+            100% { transform: rotate(180deg) scale(1); }
+        }
+        
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .header__container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header__logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        
+        .logo__icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .logo__text {
+            font-family: 'Comic Neue', cursive;
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .header__nav {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .nav__link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .nav__link:hover {
+            color: var(--primary);
+            background: rgba(255, 158, 109, 0.1);
+        }
+        
+        .nav__link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav__link:hover::after {
+            width: 100%;
+        }
+        
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+        
+        .hamburger__line {
+            width: 30px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero__bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .hero__shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(20px);
+            opacity: 0.4;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            top: 10%;
+            right: 5%;
+            animation-delay: 0s;
+        }
+        
+        .shape-2 {
+            width: 200px;
+            height: 200px;
+            background: var(--secondary);
+            bottom: 20%;
+            left: 10%;
+            animation-delay: 2s;
+        }
+        
+        .shape-3 {
+            width: 150px;
+            height: 150px;
+            background: var(--accent);
+            top: 40%;
+            right: 20%;
+            animation-delay: 4s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .hero__title {
+            font-size: 72px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: colorShift 3s infinite alternate;
+        }
+        
+        @keyframes colorShift {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(90deg); }
+        }
+        
+        .hero__subtitle {
+            font-size: 24px;
+            color: var(--dark);
+            margin-bottom: 48px;
+            opacity: 0.8;
+        }
+        
+        /* Benefits Section */
+        .benefits {
+            padding: 80px 0;
+            background: linear-gradient(135deg, rgba(109, 192, 255, 0.1), rgba(255, 158, 109, 0.1));
+            border-radius: var(--radius-xl);
+            margin: 40px 0;
+        }
+        
+        .section__title {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 48px;
+            color: var(--dark);
+        }
+        
+        .benefit-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid transparent;
+            background-clip: padding-box;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+        
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+        
+        .benefit-card__icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            color: white;
+            font-size: 32px;
+            transition: var(--transition);
+        }
+        
+        .benefit-card:hover .benefit-card__icon {
+            transform: rotate(360deg) scale(1.1);
+        }
+        
+        .benefit-card__title {
+            font-size: 24px;
+            margin-bottom: 16px;
+            color: var(--dark);
+        }
+        
+        /* Classes Section */
+        .classes {
+            padding: 80px 0;
+        }
+        
+        .class-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .class-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .class-card__image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+        
+        .class-card__content {
+            padding: 24px;
+        }
+        
+        .class-card__title {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+        
+        .class-card__age {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        /* Registration Form */
+        .registration {
+            padding: 80px 0;
+            background: linear-gradient(135deg, rgba(255, 158, 109, 0.1), rgba(109, 255, 158, 0.1));
+            border-radius: var(--radius-xl);
+            margin: 40px 0;
+        }
+        
+        .form__container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 48px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .form__title {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 32px;
+            color: var(--dark);
+        }
+        
+        .form__group {
+            margin-bottom: 24px;
+        }
+        
+        .form__label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form__input {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: var(--radius-lg);
+            border: 2px solid #E2E8F0;
+            font-family: 'Nunito', sans-serif;
+            font-size: 16px;
+            transition: var(--transition);
+            background: var(--light);
+        }
+        
+        .form__input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(255, 158, 109, 0.2);
+            background: white;
+        }
+        
+        .form__input--error {
+            border-color: #FF4757;
+        }
+        
+        .form__error {
+            color: #FF4757;
+            font-size: 14px;
+            margin-top: 4px;
+            display: none;
+        }
+        
+        .form__success {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--success), #4ADE80);
+            color: white;
+            border-radius: var(--radius-lg);
+            margin-top: 20px;
+            animation: popIn 0.5s ease;
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--dark), #1A202C);
+            color: white;
+            padding: 60px 0 30px;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        }
+        
+        .footer__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer__title {
+            font-size: 24px;
+            margin-bottom: 24px;
+            color: white;
+        }
+        
+        .footer__text {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .social-icon:hover {
+            background: var(--primary);
+            transform: translateY(-4px);
+        }
+        
+        .footer__copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Floating Elements */
+        .floating {
+            position: absolute;
+            z-index: -1;
+            animation: floatAround 15s infinite linear;
+        }
+        
+        .floating--bear {
+            font-size: 48px;
+            top: 20%;
+            right: 5%;
+            animation-delay: 0s;
+        }
+        
+        .floating--ball {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            bottom: 30%;
+            left: 5%;
+            animation-delay: 3s;
+        }
+        
+        .floating--star {
+            font-size: 32px;
+            color: var(--secondary);
+            top: 60%;
+            left: 15%;
+            animation-delay: 6s;
+        }
+        
+        @keyframes floatAround {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, -50px) rotate(90deg); }
+            50% { transform: translate(0, -100px) rotate(180deg); }
+            75% { transform: translate(-50px, -50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+            
+            .hero__title {
+                font-size: 56px;
+            }
+            
+            .col-md-1 { grid-column: span 1; }
+            .col-md-2 { grid-column: span 2; }
+            .col-md-3 { grid-column: span 3; }
+            .col-md-4 { grid-column: span 4; }
+            .col-md-5 { grid-column: span 5; }
+            .col-md-6 { grid-column: span 6; }
+        }
+        
+        @media (max-width: 768px) {
+            .header__nav {
+                display: none;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            .header__nav--mobile {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 90px;
+                left: 0;
+                width: 100%;
+                background: white;
+                padding: 24px;
+                box-shadow: var(--shadow-lg);
+                z-index: 999;
+                gap: 16px;
+            }
+            
+            .hero {
+                padding: 140px 0 60px;
+            }
+            
+            .hero__title {
+                font-size: 42px;
+            }
+            
+            .section__title {
+                font-size: 36px;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form__container {
+                padding: 32px 24px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero__title {
+                font-size: 36px;
+            }
+            
+            .btn {
+                padding: 14px 24px;
+                font-size: 16px;
+            }
+            
+            .form__input {
+                padding: 14px 16px;
+            }
+        }
+        
+        /* Mobile Menu Animation */
+        .hamburger--active .hamburger__line:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+        
+        .hamburger--active .hamburger__line:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger--active .hamburger__line:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mishka harakati effektlari -->
+    <div class="mouse-effect" id="mouseEffect"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="container header__container">
+            <a href="#" class="header__logo">
+                <div class="logo__icon">
+                    <i class="fas fa-child"></i>
+                </div>
+                <div class="logo__text">Quvnoq Bog'cha</div>
+            </a>
+            
+            <nav class="header__nav" id="mainNav">
+                <a href="#home" class="nav__link">Bosh sahifa</a>
+                <a href="#benefits" class="nav__link">Afzalliklar</a>
+                <a href="#classes" class="nav__link">Darslar</a>
+                <a href="#registration" class="nav__link">Ro'yxatdan o'tish</a>
+                <a href="#contact" class="nav__link">Aloqa</a>
+            </nav>
+            
+            <a href="#registration" class="btn btn--primary" style="display: none;">Ro'yxatdan o'tish</a>
+            
+            <button class="hamburger" id="hamburgerBtn">
+                <span class="hamburger__line"></span>
+                <span class="hamburger__line"></span>
+                <span class="hamburger__line"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero__bg">
+            <div class="hero__shape shape-1"></div>
+            <div class="hero__shape shape-2"></div>
+            <div class="hero__shape shape-3"></div>
+            
+            <!-- Floating elements -->
+            <div class="floating floating--bear">🐻</div>
+            <div class="floating floating--ball"></div>
+            <div class="floating floating--star">⭐</div>
+        </div>
+        
+        <div class="container">
+            <div class="grid">
+                <div class="col-12 col-md-8">
+                    <h1 class="hero__title">Bolalar uchun baxtli dunyo!</h1>
+                    <p class="hero__subtitle">Professional pedagoglar, zamonaviy o'quv dasturi va quvnoq muhitda bolalaringiz rivojlanishi uchun eng yaxshi shartlar.</p>
+                    <a href="#registration" class="btn btn--primary">Hoziroq ro'yxatdan o'ting <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits" id="benefits">
+        <div class="container">
+            <h2 class="section__title">Bizning Afzalliklarimiz</h2>
+            
+            <div class="grid">
+                <!-- Benefit 1 -->
+                <div class="col-4 col-md-6 col-sm-12">
+                    <div class="benefit-card">
+                        <div class="benefit-card__icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3 class="benefit-card__title">Malakali O'qituvchilar</h3>
+                        <p>Yuqori malakali va tajribali pedagoglar bolalarga g'amxo'rlik qiladi</p>
+                    </div>
+                </div>
+                
+                <!-- Benefit 2 -->
+                <div class="col-4 col-md-6 col-sm-12">
+                    <div class="benefit-card">
+                        <div class="benefit-card__icon">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                        <h3 class="benefit-card__title">Ijodiy Darslar</h3>
+                        <p>Rasm chizish, qo'shiq aytish, raqs va boshqa ijodiy faoliyat turlari</p>
+                    </div>
+                </div>
+                
+                <!-- Benefit 3 -->
+                <div class="col-4 col-md-6 col-sm-12">
+                    <div class="benefit-card">
+                        <div class="benefit-card__icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <h3 class="benefit-card__title">Sog'lom Ovqatlanish</h3>
+                        <p>Kuniga 3 marta to'g'ri ovqatlanish va vitaminli taomlar</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Classes Section -->
+    <section class="classes" id="classes">
+        <div class="container">
+            <h2 class="section__title">Bizning Darslarimiz</h2>
+            
+            <div class="grid">
+                <!-- Class 1 -->
+                <div class="col-4 col-md-6 col-sm-12">
+                    <div class="class-card">
+                        <div class="class-card__image">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <div class="class-card__content">
+                            <h3 class="class-card__title">San'at va Ranglar</h3>
+                            <div class="class-card__age">3-5 yosh</div>
+                            <p>Ranglar, shakllar bilan tanishtirish, qo'l mahoratini rivojlantirish</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Class 2 -->
+                <div class="col-4 col-md-6 col-sm-12">
+                    <div class="class-card">
+                        <div class="class-card__image">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="class-card__content">
+                            <h3 class="class-card__title">Musiqa va Harakat</h3>
+                            <div class="class-card__age">2-4 yosh</div>
+                            <p>Qo'shiq aytish, raqs, musiqa asboblari bilan tanishtirish</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Class 3 -->
+                <div class="col-4 col-md-6 col-sm-12">
+                    <div class="class-card">
+                        <div class="class-card__image">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="class-card__content">
+                            <h3 class="class-card__title">Hikoya va Til</h3>
+                            <div class="class-card__age">4-6 yosh</div>
+                            <p>Hikoya o'qish, nutqni rivojlantirish, lug'at boyitish</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Form -->
+    <section class="registration" id="registration">
+        <div class="container">
+            <div class="form__container">
+                <h2 class="form__title">Ro'yxatdan O'tish</h2>
+                
+                <form id="registrationForm">
+                    <div class="form__group">
+                        <label class="form__label" for="childName">Bola Ismi</label>
+                        <input type="text" class="form__input" id="childName" placeholder="Bola ismini kiriting">
+                        <div class="form__error" id="nameError">Iltimos, bola ismini kiriting</div>
+                    </div>
+                    
+                    <div class="form__group">
+                        <label class="form__label" for="childAge">Bola Yosh</label>
+                        <input type="number" class="form__input" id="childAge" placeholder="Yoshni kiriting (1-6)">
+                        <div class="form__error" id="ageError">Iltimos, to'g'ri yosh kiriting (1-6)</div>
+                    </div>
+                    
+                    <div class="form__group">
+                        <label class="form__label" for="parentPhone">Ota-ona Telefon Raqami</label>
+                        <input type="tel" class="form__input" id="parentPhone" placeholder="+998 90 123 45 67">
+                        <div class="form__error" id="phoneError">Iltimos, to'g'ri telefon raqam kiriting</div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn--primary" style="width: 100%; margin-top: 20px;">
+                        Ro'yxatdan o'tish <i class="fas fa-paper-plane"></i>
+                    </button>
+                    
+                    <div class="form__success" id="formSuccess">
+                        <i class="fas fa-check-circle" style="font-size: 32px; margin-bottom: 10px;"></i>
+                        <h3>Muvaffaqiyatli!</h3>
+                        <p>Arizangiz qabul qilindi. Tez orada siz bilan bog'lanamiz.</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer__grid">
+                <div>
+                    <h3 class="footer__title">Quvnoq Bog'cha</h3>
+                    <p class="footer__text">Bolalarning baxtli bolaligi va sog'lom rivojlanishi uchun yaratilgan zamonaviy bog'cha.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="footer__title">Aloqa</h3>
+                    <p class="footer__text"><i class="fas fa-phone"></i> +998 90 123 45 67</p>
+                    <p class="footer__text"><i class="fas fa-envelope"></i> info@quvnoqbogcha.uz</p>
+                    <p class="footer__text"><i class="fas fa-map-marker-alt"></i> Toshkent sh., Yunusobod t.</p>
+                </div>
+                
+                <div>
+                    <h3 class="footer__title">Ish vaqti</h3>
+                    <p class="footer__text">Dushanba - Juma: 8:00 - 18:00</p>
+                    <p class="footer__text">Shanba: 9:00 - 14:00</p>
+                    <p class="footer__text">Yakshanba: Dam olish kuni</p>
+                </div>
+            </div>
+            
+            <div class="footer__copyright">
+                <p>Muallif: Jo'rayev © 2023 Quvnoq Bog'cha. Barcha huquqlar himoyalangan.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mishka harakati effekti
+        const mouseEffect = document.getElementById('mouseEffect');
+        const trails = [];
+        
+        document.addEventListener('mousemove', (e) => {
+            // Asosiy effekt
+            mouseEffect.style.left = e.pageX + 'px';
+            mouseEffect.style.top = e.pageY + 'px';
+            
+            // Trail effekti
+            const trail = document.createElement('div');
+            trail.className = 'trail';
+            trail.style.left = e.pageX + 'px';
+            trail.style.top = e.pageY + 'px';
+            document.body.appendChild(trail);
+            
+            trails.push(trail);
+            
+            // Faqat oxirgi 15 ta trail ni saqlash
+            if (trails.length > 15) {
+                const oldTrail = trails.shift();
+                setTimeout(() => {
+                    if (oldTrail.parentNode) {
+                        oldTrail.parentNode.removeChild(oldTrail);
+                    }
+                }, 100);
+            }
+            
+            // Trail larni asta-sekin yo'qolishi
+            setTimeout(() => {
+                trail.style.opacity = '0';
+                trail.style.transform = 'scale(0.5)';
+                setTimeout(() => {
+                    if (trail.parentNode) {
+                        trail.parentNode.removeChild(trail);
+                    }
+                }, 300);
+            }, 500);
+            
+            // Elementlar ustida bo'lganda effekt
+            const hoverElements = document.querySelectorAll('.btn, .benefit-card, .class-card, .nav__link');
+            hoverElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (
+                    e.pageX >= rect.left &&
+                    e.pageX <= rect.right &&
+                    e.pageY >= rect.top &&
+                    e.pageY <= rect.bottom
+                ) {
+                    mouseEffect.style.transform = 'scale(2)';
+                    mouseEffect.style.background = 'radial-gradient(circle, var(--accent) 0%, transparent 70%)';
+                } else {
+                    mouseEffect.style.transform = 'scale(1)';
+                    mouseEffect.style.background = 'radial-gradient(circle, var(--accent) 0%, transparent 70%)';
+                }
+            });
+        });
+        
+        // Mobile menu toggle
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const mainNav = document.getElementById('mainNav');
+        
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerBtn.classList.toggle('hamburger--active');
+            mainNav.classList.toggle('header__nav--mobile');
+            
+            if (mainNav.classList.contains('header__nav--mobile')) {
+                mainNav.style.display = 'flex';
+            } else {
+                mainNav.style.display = 'none';
+            }
+        });
+        
+        // Form validation
+        const registrationForm = document.getElementById('registrationForm');
+        const formSuccess = document.getElementById('formSuccess');
+        
+        registrationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            let isValid = true;
+            
+            // Validate child name
+            const childName = document.getElementById('childName');
+            const nameError = document.getElementById('nameError');
+            if (!childName.value.trim()) {
+                childName.classList.add('form__input--error');
+                nameError.style.display = 'block';
+                isValid = false;
+            } else {
+                childName.classList.remove('form__input--error');
+                nameError.style.display = 'none';
+            }
+            
+            // Validate child age
+            const childAge = document.getElementById('childAge');
+            const ageError = document.getElementById('ageError');
+            const age = parseInt(childAge.value);
+            if (isNaN(age) || age < 1 || age > 6) {
+                childAge.classList.add('form__input--error');
+                ageError.style.display = 'block';
+                isValid = false;
+            } else {
+                childAge.classList.remove('form__input--error');
+                ageError.style.display = 'none';
+            }
+            
+            // Validate phone
+            const parentPhone = document.getElementById('parentPhone');
+            const phoneError = document.getElementById('phoneError');
+            const phoneRegex = /^\+998\d{9}$/;
+            if (!phoneRegex.test(parentPhone.value.replace(/\s/g, ''))) {
+                parentPhone.classList.add('form__input--error');
+                phoneError.style.display = 'block';
+                isValid = false;
+            } else {
+                parentPhone.classList.remove('form__input--error');
+                phoneError.style.display = 'none';
+            }
+            
+            if (isValid) {
+                formSuccess.style.display = 'block';
+                registrationForm.reset();
+                
+                // Formani yuqoriga scroll qilish
+                formSuccess.scrollIntoView({ behavior: 'smooth' });
+                
+                // 5 soniyadan keyin success xabarni yashirish
+                setTimeout(() => {
+                    formSuccess.style.display = 'none';
+                }, 5000);
+            }
+        });
+        
+        // Benefit card hover animation
+        const benefitCards = document.querySelectorAll('.benefit-card');
+        benefitCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const icon = card.querySelector('.benefit-card__icon');
+                icon.style.background = 'linear-gradient(135deg, var(--accent), var(--primary))';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                const icon = card.querySelector('.benefit-card__icon');
+                icon.style.background = 'linear-gradient(135deg, var(--primary), var(--secondary))';
+            });
+        });
+        
+        // Class card hover animation
+        const classCards = document.querySelectorAll('.class-card');
+        classCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const image = card.querySelector('.class-card__image');
+                image.style.transform = 'scale(1.05)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                const image = card.querySelector('.class-card__image');
+                image.style.transform = 'scale(1)';
+            });
+        });
+        
+        // Floating elements animation
+        const floatingElements = document.querySelectorAll('.floating');
+        floatingElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                el.style.animationPlayState = 'paused';
+                el.style.transform = 'scale(1.5)';
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                el.style.animationPlayState = 'running';
+                el.style.transform = 'scale(1)';
+            });
+        });
+        
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Mobile menyuni yopish
+                    if (mainNav.classList.contains('header__nav--mobile')) {
+                        hamburgerBtn.classList.remove('hamburger--active');
+                        mainNav.classList.remove('header__nav--mobile');
+                        mainNav.style.display = 'none';
+                    }
+                }
+            });
+        });
+        
+        // Rasmli konfetti effekti tugma bosilganda
+        registrationForm.querySelector('.btn').addEventListener('click', () => {
+            if (registrationForm.checkValidity()) {
+                createConfetti();
+            }
+        });
+        
+        function createConfetti() {
+            const colors = ['#FF9E6D', '#6DC0FF', '#FF6DC0', '#6DFF9E'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = '50%';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.zIndex = '99999';
+                confetti.style.pointerEvents = 'none';
+                
+                document.body.appendChild(confetti);
+                
+                // Animatsiya
+                const animation = confetti.animate([
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                    { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: 1000 + Math.random() * 1000,
+                    easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
+                });
+                
+                animation.onfinish = () => {
+                    confetti.remove();
+                };
+            }
+        }
+    </script>
+</body>
+</html>
